@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://djq0mow0sand8"]
+
+[ext_resource type="Texture2D" uid="uid://bicdmlclpf57c" path="res://ressources/ui/main_menu_background.png" id="1_mseom"]
+[ext_resource type="Texture2D" uid="uid://cd6xvooju5qun" path="res://ressources/ui/Custom Button Normal 2.png" id="2_rcfmm"]
+[ext_resource type="Texture2D" uid="uid://c83oskyt35t7x" path="res://ressources/ui/Custom Button Active 2.png" id="3_7rdtt"]
+[ext_resource type="Texture2D" uid="uid://cs3k6dh47ac82" path="res://ressources/ui/Custom Button Hover 2.png" id="4_esnay"]
+[ext_resource type="Texture2D" uid="uid://8y0ebj3sbls8" path="res://ressources/ui/Custom Button Disable 2.png" id="5_urd58"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_mseom")
+
+[node name="MarginContainer" type="MarginContainer" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = 100.0
+offset_right = -100.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TextureRect/MarginContainer"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="TextureRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture_normal = ExtResource("2_rcfmm")
+texture_pressed = ExtResource("3_7rdtt")
+texture_hover = ExtResource("4_esnay")
+texture_disabled = ExtResource("5_urd58")
+texture_focused = ExtResource("3_7rdtt")
+stretch_mode = 0
