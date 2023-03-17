@@ -1,45 +1,146 @@
-[gd_scene load_steps=6 format=3 uid="uid://djq0mow0sand8"]
+[gd_scene load_steps=7 format=3 uid="uid://cpqjoaa7b4hg4"]
 
 [ext_resource type="Texture2D" uid="uid://bicdmlclpf57c" path="res://ressources/ui/main_menu_background.png" id="1_mseom"]
-[ext_resource type="Texture2D" uid="uid://cd6xvooju5qun" path="res://ressources/ui/Custom Button Normal 2.png" id="2_rcfmm"]
-[ext_resource type="Texture2D" uid="uid://c83oskyt35t7x" path="res://ressources/ui/Custom Button Active 2.png" id="3_7rdtt"]
-[ext_resource type="Texture2D" uid="uid://cs3k6dh47ac82" path="res://ressources/ui/Custom Button Hover 2.png" id="4_esnay"]
-[ext_resource type="Texture2D" uid="uid://8y0ebj3sbls8" path="res://ressources/ui/Custom Button Disable 2.png" id="5_urd58"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_u733s"]
+[ext_resource type="Texture2D" uid="uid://ckeye0kx0doeb" path="res://ressources/ui/UI-flatpak/UI_Flat_Button_Large_Lock_01a1.png" id="2_og0o8"]
+[ext_resource type="Texture2D" uid="uid://cjcc2b0dvoi10" path="res://ressources/ui/UI-flatpak/UI_Flat_Button_Large_Lock_01a4.png" id="3_dcae4"]
+[ext_resource type="Texture2D" uid="uid://cyd3ihb3ssltt" path="res://ressources/ui/UI-flatpak/UI_Flat_Button_Large_Lock_01a2.png" id="4_56htu"]
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="Theme" id="Theme_n16ua"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_u733s")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
+offset_right = 1920.0
+offset_bottom = 1080.0
 texture = ExtResource("1_mseom")
 
 [node name="MarginContainer" type="MarginContainer" parent="TextureRect"]
+layout_direction = 3
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 100.0
-offset_top = 100.0
-offset_right = -100.0
-offset_bottom = -100.0
+offset_right = -1620.0
+offset_bottom = -500.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = -50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = -50
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TextureRect/MarginContainer"]
 layout_direction = 3
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 size_flags_vertical = 0
+theme = SubResource("Theme_n16ua")
+theme_type_variation = &"main_menu"
+theme_override_constants/separation = 60
 alignment = 1
 
-[node name="TextureButton" type="TextureButton" parent="TextureRect/MarginContainer/VBoxContainer"]
+[node name="NewGame" type="TextureButton" parent="TextureRect/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
-texture_normal = ExtResource("2_rcfmm")
-texture_pressed = ExtResource("3_7rdtt")
-texture_hover = ExtResource("4_esnay")
-texture_disabled = ExtResource("5_urd58")
-texture_focused = ExtResource("3_7rdtt")
+texture_normal = ExtResource("2_og0o8")
+texture_pressed = ExtResource("3_dcae4")
+texture_hover = ExtResource("4_56htu")
 stretch_mode = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TextureRect/MarginContainer/VBoxContainer/NewGame"]
+clip_contents = false
+custom_minimum_size = Vector2(300, 100)
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_right = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 52
+text = "New Game"
+scroll_active = false
+
+[node name="LoadGame" type="TextureButton" parent="TextureRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture_normal = ExtResource("2_og0o8")
+texture_pressed = ExtResource("3_dcae4")
+texture_hover = ExtResource("4_56htu")
+stretch_mode = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TextureRect/MarginContainer/VBoxContainer/LoadGame"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -10.0
+offset_right = -10.0
+offset_bottom = 100.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 52
+text = "Load Game"
+scroll_active = false
+
+[node name="Settings" type="TextureButton" parent="TextureRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture_normal = ExtResource("2_og0o8")
+texture_pressed = ExtResource("3_dcae4")
+texture_hover = ExtResource("4_56htu")
+stretch_mode = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TextureRect/MarginContainer/VBoxContainer/Settings"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -10.0
+offset_right = -10.0
+offset_bottom = 100.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 52
+text = "Settings"
+scroll_active = false
+
+[node name="ExitGame" type="TextureButton" parent="TextureRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture_normal = ExtResource("2_og0o8")
+texture_pressed = ExtResource("3_dcae4")
+texture_hover = ExtResource("4_56htu")
+stretch_mode = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TextureRect/MarginContainer/VBoxContainer/ExitGame"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -10.0
+offset_right = -10.0
+offset_bottom = 100.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 52
+text = "Exit Game"
+scroll_active = false
