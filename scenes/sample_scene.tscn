@@ -6,6 +6,8 @@
 [node name="sampleGame" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+offset_left = 1.0
+offset_right = 1.0
 script = ExtResource("1_dj50q")
 metadata/_edit_horizontal_guides_ = []
 
@@ -18,3 +20,5 @@ layer_0/tile_data = PackedInt32Array(4391032, 327680, 0, 4325496, 327680, 1, 425
 tile_set = ExtResource("1_p5m3a")
 format = 2
 layer_0/tile_data = PackedInt32Array(2621499, 3538944, 19, 2621498, 3538944, 19, 2555962, 3538944, 19, 2555961, 3538944, 19, 2490424, 3538944, 19, 2424887, 3538944, 19, 2359350, 3538944, 19, 2293814, 3538944, 19, 2293813, 3538944, 19, 1507393, 3538944, 19, 655422, 3538944, 19)
+
+[node name="Camera2D" type="Camera2D" parent="."]

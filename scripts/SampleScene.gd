@@ -1,26 +1,55 @@
 extends Control
 
 var build_mode = false
+var speed = 10
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+var existing_units = [Vector2i(-1, -1)]
 
 func action_set_unit(tile_id, cell):
-	if !cell:
+	if !(tile_id in existing_units):
 		var tile_node = get_parent().get_node("sampleGame")
 		var new_unit = load("res://ressources/units/base.tscn").instantiate()
 		new_unit.position = tile_id * 16
 		tile_node.add_child(new_unit, true)
-		var index = [0,0]
-		tile_node.get_node("clickable").set_cell(0, tile_id, -1, index, 0)
+		existing_units.append(tile_id)
+		# build_mode = false
+
+func camera_zoom():
+	var cam : Camera2D = get_parent().get_camera_2d()
+	# zoom
+	var input_zoom = Input.get_axis("camera_zoom_up", "camera_zoom_down")
+	var curr_zoom = cam.zoom
+	print(input_zoom)
+	if input_zoom == 0:
+		return
+	elif curr_zoom.x < 1.6 and input_zoom == 1:
+		curr_zoom.x -= 0.1
+	elif curr_zoom.x >= 0.4 and input_zoom == -1:
+		curr_zoom.x += 0.1
+	curr_zoom.y = curr_zoom.x
+	cam.zoom = curr_zoom
+
+
+func movement():
+	var scene_handler = get_parent()
+	var cam : Camera2D = scene_handler.get_camera_2d()
+	# move
+	var input_direction = Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
+	var velocity = input_direction * speed
+	cam.move_local_x(velocity[0])
+	cam.move_local_y(velocity[1])
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
 	
+	pass # Replace with function body.
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	var scene_handler = get_parent()
 	# check for exit game
 	if Input.is_key_pressed(KEY_ESCAPE):
-		var scene_handler = get_parent()
 		scene_handler.print_tree()
 		scene_handler.get_node("sampleGame").queue_free()
 		scene_handler.get_node("MainMenu").set_process(true)
@@ -37,8 +66,12 @@ func _process(delta):
 		if build_mode:
 			action_set_unit(prop, prop_map.get_cell_tile_data(0, prop))
 	# enter|exit build mode
-	if Input.is_key_pressed(KEY_B):
-		if build_mode:
-			build_mode = false
-		else:
-			build_mode=true
+	if Input.is_action_just_released("enter_build_mode") and build_mode == false:
+		build_mode = true
+	elif Input.is_action_just_released("enter_build_mode") and build_mode == true:
+		build_mode = false
+func _physics_process(_delta):
+	movement()
+
+func _input(_event):
+	camera_zoom()
