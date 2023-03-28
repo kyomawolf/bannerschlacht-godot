@@ -2,13 +2,17 @@ extends Control
 
 var build_mode = false
 var speed = 10
+var unit_mode=1
 
 var existing_units = [Vector2i(-1, -1)]
 
 func action_set_unit(tile_id, cell):
 	if !(tile_id in existing_units):
 		var tile_node = get_parent().get_node("sampleGame")
-		var new_unit = load("res://ressources/units/base.tscn").instantiate()
+		var unit_name = "res://ressources/units/base.tscn"
+		if unit_mode == 2:
+			unit_name = "res://ressources/units/base_enemy.tscn"
+		var new_unit = load(unit_name).instantiate()
 		new_unit.position = tile_id * 16
 		tile_node.add_child(new_unit, true)
 		existing_units.append(tile_id)
@@ -19,13 +23,13 @@ func camera_zoom():
 	# zoom
 	var input_zoom = Input.get_axis("camera_zoom_up", "camera_zoom_down")
 	var curr_zoom = cam.zoom
-	print(input_zoom)
 	if input_zoom == 0:
 		return
-	elif curr_zoom.x < 1.6 and input_zoom == 1:
-		curr_zoom.x -= 0.1
-	elif curr_zoom.x >= 0.4 and input_zoom == -1:
+	print(input_zoom, "  ", curr_zoom)
+	if curr_zoom.x < 1.6 and input_zoom == -1:
 		curr_zoom.x += 0.1
+	elif curr_zoom.x >= 0.4 and input_zoom == 1:
+		curr_zoom.x -= 0.1
 	curr_zoom.y = curr_zoom.x
 	cam.zoom = curr_zoom
 
@@ -70,6 +74,12 @@ func _process(delta):
 		build_mode = true
 	elif Input.is_action_just_released("enter_build_mode") and build_mode == true:
 		build_mode = false
+	if Input.is_action_just_released("num_1"):
+		unit_mode = 1
+		print(unit_mode)
+	elif Input.is_action_just_released("num_2"):
+		unit_mode = 2
+		print(unit_mode)
 func _physics_process(_delta):
 	movement()
 
