@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtq6wmkgknj54"]
+[gd_scene load_steps=3 format=3 uid="uid://dtq6wmkgknj54"]
 
 [ext_resource type="Texture2D" uid="uid://b70ov7kpla513" path="res://ressources/units/test_grafics1.png" id="1_45hvd"]
+[ext_resource type="Script" path="res://scripts/base_unit_script.gd" id="2_g3xg2"]
 
 [node name="normal_unit" type="Sprite2D"]
 texture_filter = 1
 texture_repeat = 1
 texture = ExtResource("1_45hvd")
 centered = false
+script = ExtResource("2_g3xg2")

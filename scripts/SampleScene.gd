@@ -43,6 +43,12 @@ func movement():
 	cam.move_local_x(velocity[0])
 	cam.move_local_y(velocity[1])
 
+func game_mode():
+	# click on units and then be able to  move them. If clicked on other unit, battle it
+	#if Input.mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		#pass
+	pass
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -74,6 +80,9 @@ func _process(delta):
 		build_mode = true
 	elif Input.is_action_just_released("enter_build_mode") and build_mode == true:
 		build_mode = false
+	if not build_mode:
+		game_mode()
+		return
 	if Input.is_action_just_released("num_1"):
 		unit_mode = 1
 		print(unit_mode)
