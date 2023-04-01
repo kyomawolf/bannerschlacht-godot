@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://xg50v00fjkki"]
+
+[ext_resource type="Script" path="res://scripts/ingame_ui.gd" id="1_0vwr5"]
+
+[node name="ingame_ui" type="Node2D"]
+script = ExtResource("1_0vwr5")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
