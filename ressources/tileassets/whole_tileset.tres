@@ -1881,4 +1881,5 @@ terrain_set_0/terrain_0/name = "water"
 terrain_set_0/terrain_0/color = Color(0.501961, 0.345098, 0.25098, 1)
 terrain_set_0/terrain_1/name = "plains"
 terrain_set_0/terrain_1/color = Color(0.270588, 0.439216, 0.713726, 1)
+navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_i1d47")

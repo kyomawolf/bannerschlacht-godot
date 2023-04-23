@@ -144,3 +144,14 @@ theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 52
 text = "Exit Game"
 scroll_active = false
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TextureRect"]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 80.0
+offset_right = 1464.0
+offset_bottom = 520.0
+text = "Hallo Spieler,
+Dies ist eine Demo - das bedeutet, dass es nur ein Level und keine Moeglichkeit zum Speichern des Spiels gibt. 
+Fast alle Graphiken sind Platzhalter und Ansonsten viel Spass beim ausprobieren!
+Fuer  Kritik gibt es diesen Discord-server"

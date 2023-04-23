@@ -8,15 +8,18 @@ func _ready():
 	new_game_button.pressed.connect(self.on_new_game_pressed)
 	exit_game_button.pressed.connect(self.on_quit_pressed)
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
 
 func on_new_game_pressed():
 #	get_node("MainMenu").queue_free()
 	get_node("MainMenu").set_process(false)
 	var game_scene = load("res://scenes/sample_scene.tscn").instantiate()
 	add_child(game_scene)
+
 
 func on_quit_pressed():
 	get_tree().quit()

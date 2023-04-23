@@ -1,10 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://xg50v00fjkki"]
+[gd_scene load_steps=5 format=3 uid="uid://xg50v00fjkki"]
 
 [ext_resource type="Script" path="res://scripts/ingame_ui.gd" id="1_0vwr5"]
+[ext_resource type="Texture2D" uid="uid://cuupfafwt642f" path="res://ressources/ui/UI-flatpak/UI_Flat_Slot_01_Available.png" id="2_g06lb"]
+[ext_resource type="Texture2D" uid="uid://bl2twhry2kt7k" path="res://ressources/ui/UI-flatpak/UI_Flat_Slot_02_Selected.png" id="3_bty1b"]
+[ext_resource type="Texture2D" uid="uid://dlentypncy75x" path="res://ressources/ui/UI-flatpak/UI_Flat_Slot_01_Selected.png" id="4_73q8v"]
 
 [node name="ingame_ui" type="Node2D"]
+
+[node name="main" type="MarginContainer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
 script = ExtResource("1_0vwr5")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="top_bar" type="HBoxContainer" parent="main"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="control" type="HBoxContainer" parent="main"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="next_round" type="TextureButton" parent="main/control"]
+layout_mode = 2
+texture_normal = ExtResource("2_g06lb")
+texture_pressed = ExtResource("3_bty1b")
+texture_hover = ExtResource("4_73q8v")
