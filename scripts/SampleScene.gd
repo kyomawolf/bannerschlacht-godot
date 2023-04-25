@@ -7,6 +7,7 @@ var selected = null
 var ui = null
 var cam : Camera2D = null
 var once = false
+var terrain = null
 var visible_tiles = [] # Vector2i
 
 var existing_units = [{"pos": Vector2i(-1, -1), "unit": null}]
@@ -76,7 +77,9 @@ func game_mode():
 func _ready():
 	ui = self.get_node("ui_layer").get_node("ingame_ui").get_node("main")
 	cam = self.get_node("Camera2D")
+	terrain = self.get_node("terrain")
 	var next_button = ui.get_node("control").get_node("next_round")
+	
 	next_button.pressed.connect(self.next_round)
 	
 
@@ -121,7 +124,9 @@ func next_round():
 			continue
 		# do actions defined before (movement attack, etc)
 	# calculate fog of war
+	fog_of_war(0)
 	add_visibles(Vector2i(2, 2), 3)
+	
 
 func add_visibles(origin: Vector2, length: int):
 	for i in range(origin.x - length, origin.x + length + 1):
@@ -130,13 +135,15 @@ func add_visibles(origin: Vector2, length: int):
 				print("in range", origin, Vector2i(i, ii), length)
 			else:
 				print("not in range", origin, Vector2i(i, ii), length)
-				# visible_tiles.append(Vector2i(i, ii))
+				visible_tiles.append(Vector2i(i, ii))
 		
 
 func fog_of_war(player):
 	for entry in existing_units:
 		if entry["unit"].player == player:
 			add_visibles(entry["unit"].position, entry["unit"].sight)
+	for idx in visible_tiles:
+		terrain.erase_cell(0, idx)
 
 func _physics_process(_delta):
 	movement()

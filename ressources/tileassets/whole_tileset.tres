@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://3m88ovwx4tu7"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://3m88ovwx4tu7"]
 
 [ext_resource type="Texture2D" uid="uid://ob7stl8uhvod" path="res://ressources/tileassets/roguelikeSheet_transparent.png" id="1_gnxvt"]
+[ext_resource type="Texture2D" uid="uid://uitybi8qj5by" path="res://ressources/tileassets/gray_fow.png" id="2_sxg7y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i1d47"]
 texture = ExtResource("1_gnxvt")
@@ -1875,6 +1876,10 @@ separation = Vector2i(1, 1)
 55:30/0 = 0
 56:30/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_60f53"]
+texture = ExtResource("2_sxg7y")
+0:0/0 = 0
+
 [resource]
 terrain_set_0/mode = 1
 terrain_set_0/terrain_0/name = "water"
@@ -1883,3 +1888,4 @@ terrain_set_0/terrain_1/name = "plains"
 terrain_set_0/terrain_1/color = Color(0.270588, 0.439216, 0.713726, 1)
 navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_i1d47")
+sources/1 = SubResource("TileSetAtlasSource_60f53")
