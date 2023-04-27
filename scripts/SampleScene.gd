@@ -12,8 +12,14 @@ var visible_tiles = [] # Vector2i
 
 var existing_units = [{"pos": Vector2i(-1, -1), "unit": null}]
 
+func tile_is_occupied(tile: Vector2i):
+	for idx in existing_units:
+		if idx["pos"] == tile:
+			return true
+	return false
+
 func action_set_unit(tile_id, cell):
-	if !(tile_id in existing_units):
+	if not tile_is_occupied(tile_id):
 		var tile_node = get_parent().get_node("sampleGame")
 		var unit_name = "res://ressources/units/base.tscn"
 		if unit_mode == 2:
@@ -21,8 +27,8 @@ func action_set_unit(tile_id, cell):
 		var new_unit = load(unit_name).instantiate()
 		new_unit.position = tile_id * 16
 		tile_node.add_child(new_unit, true)
-		existing_units.append({"pos": tile_id, "unit": new_unit})
 		new_unit.player = unit_mode
+		existing_units.append({"pos": tile_id, "unit": new_unit})
 		# set tile 45, 29
 
 
@@ -124,25 +130,31 @@ func next_round():
 			continue
 		# do actions defined before (movement attack, etc)
 	# calculate fog of war
-	fog_of_war(0)
-	add_visibles(Vector2i(2, 2), 3)
+	fog_of_war(1)
+	
 	
 
 func add_visibles(origin: Vector2, length: int):
+	print(origin)
+	print(Vector2i(origin))
+	visible_tiles.append(Vector2i(origin))
 	for i in range(origin.x - length, origin.x + length + 1):
 		for ii in range(origin.y - length, origin.y + length + 1):
 			if origin.distance_to(Vector2i(i, ii)) <= length:
-				print("in range", origin, Vector2i(i, ii), length)
-			else:
-				print("not in range", origin, Vector2i(i, ii), length)
+				# print("in range", origin, Vector2i(i, ii), length)
 				visible_tiles.append(Vector2i(i, ii))
+			#else:
+				#print("not in range", origin, Vector2i(i, ii), length)
 		
 
 func fog_of_war(player):
 	for entry in existing_units:
-		if entry["unit"].player == player:
+		if entry["unit"] != null && \
+		entry["unit"].player == player:
+			print(player, "unit added")
 			add_visibles(entry["unit"].position, entry["unit"].sight)
 	for idx in visible_tiles:
+		print(idx)
 		terrain.erase_cell(0, idx)
 
 func _physics_process(_delta):

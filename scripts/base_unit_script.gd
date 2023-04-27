@@ -27,3 +27,7 @@ func base_actions():
 
 func path_finder(start: Vector2i, end: Vector2i):
 	pass
+
+
+func get_player():
+	return player

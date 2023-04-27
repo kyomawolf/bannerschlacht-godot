@@ -18,6 +18,7 @@ func _process(delta):
 	pass
 
 func render_unit(unit):
-	print("health:", unit.health)
-	print("attack:", unit.attack)
-	print("defense:", unit.defense)
+	pass
+#	print("health:", unit.health)
+#	print("attack:", unit.attack)
+#	print("defense:", unit.defense)
