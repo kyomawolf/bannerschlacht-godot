@@ -9,6 +9,7 @@ var cam : Camera2D = null
 var once = false
 var terrain = null
 var visible_tiles = [] # Vector2i
+var debug = false
 
 var existing_units = [{"pos": Vector2i(-1, -1), "unit": null}]
 
@@ -26,6 +27,8 @@ func action_set_unit(tile_id, cell):
 			unit_name = "res://ressources/units/base_enemy.tscn"
 		var new_unit = load(unit_name).instantiate()
 		new_unit.position = tile_id * 16
+		if unit_mode != 1 and debug == false:
+			new_unit.visible = false
 		tile_node.add_child(new_unit, true)
 		new_unit.player = unit_mode
 		existing_units.append({"pos": tile_id, "unit": new_unit})
@@ -138,6 +141,8 @@ func add_visibles(origin: Vector2, length: int):
 	print(origin)
 	print(Vector2i(origin))
 	visible_tiles.append(Vector2i(origin))
+	print(origin.x - length, " ", origin.y - length)
+	print(origin.x + length, " ", origin.y + length)
 	for i in range(origin.x - length, origin.x + length + 1):
 		for ii in range(origin.y - length, origin.y + length + 1):
 			if origin.distance_to(Vector2i(i, ii)) <= length:
@@ -148,14 +153,19 @@ func add_visibles(origin: Vector2, length: int):
 		
 
 func fog_of_war(player):
+	print(terrain.get_layers_count())
 	for entry in existing_units:
 		if entry["unit"] != null && \
 		entry["unit"].player == player:
-			print(player, "unit added")
-			add_visibles(entry["unit"].position, entry["unit"].sight)
+			print(entry, "unit added")
+			add_visibles(entry["pos"], entry["unit"].sight)
 	for idx in visible_tiles:
 		print(idx)
 		terrain.erase_cell(0, idx)
+		for entry in existing_units:
+			if entry['pos'] == idx:
+				entry["unit"].visible = true
+		#terrain.set_cell(1, idx, 0, Vector2i(0,0))
 
 func _physics_process(_delta):
 	movement()
