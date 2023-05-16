@@ -1,6 +1,7 @@
 extends Control
 
 var build_mode = false
+var move_mode = false
 var speed = 10
 var unit_mode=1
 var selected = null
@@ -13,12 +14,16 @@ var debug = false
 
 var existing_units = [{"pos": Vector2i(-1, -1), "unit": null}]
 
+
+# checks if field is empty
 func tile_is_occupied(tile: Vector2i):
 	for idx in existing_units:
 		if idx["pos"] == tile:
 			return true
 	return false
 
+
+# sets new unit on battlefield
 func action_set_unit(tile_id, cell):
 	if not tile_is_occupied(tile_id):
 		var tile_node = get_parent().get_node("sampleGame")
@@ -34,14 +39,14 @@ func action_set_unit(tile_id, cell):
 		existing_units.append({"pos": tile_id, "unit": new_unit})
 		# set tile 45, 29
 
-
+# camera zoom
 func camera_zoom():
 	# zoom
 	var input_zoom = Input.get_axis("camera_zoom_up", "camera_zoom_down")
 	var curr_zoom = cam.zoom
 	if input_zoom == 0:
 		return
-	print(input_zoom, "  ", curr_zoom)
+	# print(input_zoom, "  ", curr_zoom)
 	if curr_zoom.x < 1.6 and input_zoom == -1:
 		curr_zoom.x += 0.1
 	elif curr_zoom.x >= 0.4 and input_zoom == 1:
@@ -50,8 +55,8 @@ func camera_zoom():
 	cam.zoom = curr_zoom
 
 
+# camera movement
 func movement():
-	# move
 	var input_direction = Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
 	var velocity = input_direction * speed
 	cam.move_local_x(velocity[0])
@@ -60,24 +65,24 @@ func movement():
 
 func game_mode():
 	# click on units and then be able to  move them. If clicked on other unit, battle it
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		once = true
+	if Input.is_action_just_released("mouse_left") and move_mode:
 		if selected != null:
-			selected.target = self.get_node("terrain").local_to_map(get_global_mouse_position())
-			print("moving...")
+			var new_position = self.get_node("terrain").local_to_map(get_global_mouse_position())
+			if !tile_is_occupied(new_position):
+				selected["unit"].add_action_to_list("move", new_position)
+				selected = null
 		else:
 			var tile_map = self.get_node("terrain")
 			var tile_id = tile_map.local_to_map(get_global_mouse_position())
+			print(tile_id)
 			for entry in existing_units:
 				if entry["pos"] == tile_id:
 					print("unit found")
 					var unit = entry["unit"]
 					ui.render_unit(unit)
-					selected = unit
+					selected = entry
 					break
-	elif !Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		once = false
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+	if Input.is_action_just_released("mouse_right"):
 		selected = null
 
 
@@ -94,6 +99,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+# captures user input
 func _process(delta):
 	var scene_handler = get_parent()
 	# check for exit game
@@ -102,7 +108,7 @@ func _process(delta):
 		scene_handler.get_node("sampleGame").queue_free()
 		scene_handler.get_node("MainMenu").set_process(true)
 	# check for tile selection
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and build_mode:
+	if Input.is_action_just_released("mouse_left") and build_mode:
 		var tile_node = get_parent()
 		var tile_map = tile_node.get_node("sampleGame").get_node("terrain")
 		var prop_map = tile_node.get_node("sampleGame").get_node("clickable")
@@ -117,6 +123,10 @@ func _process(delta):
 		build_mode = true
 	elif Input.is_action_just_released("enter_build_mode") and build_mode == true:
 		build_mode = false
+	if Input.is_action_just_released("move_unit") and build_mode == false and move_mode == false:
+		move_mode = true
+	elif Input.is_action_just_released("move_unit") and build_mode and move_mode == true:
+		build_mode = false
 	if not build_mode:
 		game_mode()
 		return
@@ -127,19 +137,25 @@ func _process(delta):
 		unit_mode = 2
 		print(unit_mode)
 
+
+# main round process
+# fow, enemy routines, events
 func next_round():
 	for entry in existing_units:
-		if entry["unit"] == null:
-			continue
+		if entry["unit"] != null:
+			var new_pos = entry["unit"].get_next_action("move")
+			if new_pos:
+				entry["pos"] = new_pos
+				entry["unit"].position = entry["pos"] * 16
+			entry["unit"].flush_action_list()
 		# do actions defined before (movement attack, etc)
 	# calculate fog of war
 	fog_of_war(1)
 	
 	
-
+# checks the tiles that are made visible by friendly units
 func add_visibles(origin: Vector2, length: int):
 	print(origin)
-	print(Vector2i(origin))
 	visible_tiles.append(Vector2i(origin))
 	print(origin.x - length, " ", origin.y - length)
 	print(origin.x + length, " ", origin.y + length)
@@ -152,6 +168,7 @@ func add_visibles(origin: Vector2, length: int):
 				#print("not in range", origin, Vector2i(i, ii), length)
 		
 
+# removes fow from visible fields and discovers enemy units
 func fog_of_war(player):
 	print(terrain.get_layers_count())
 	for entry in existing_units:
