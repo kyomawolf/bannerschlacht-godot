@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://h8ehe68cvy83"]
+[gd_scene load_steps=5 format=3 uid="uid://h8ehe68cvy83"]
 
 [ext_resource type="Script" path="res://scripts/SampleScene.gd" id="1_dj50q"]
 [ext_resource type="TileSet" uid="uid://3m88ovwx4tu7" path="res://ressources/tileassets/whole_tileset.tres" id="1_p5m3a"]
+[ext_resource type="Script" path="res://scripts/camera_script.gd" id="3_5r1ux"]
 [ext_resource type="PackedScene" uid="uid://xg50v00fjkki" path="res://ressources/ui/ingame_ui.tscn" id="3_ek0qx"]
 
 [node name="sampleGame" type="Control"]
@@ -34,6 +35,11 @@ format = 2
 layer_0/tile_data = PackedInt32Array(2621499, 3538944, 19, 2621498, 3538944, 19, 2555962, 3538944, 19, 2555961, 3538944, 19, 2490424, 3538944, 19, 2424887, 3538944, 19, 2359350, 3538944, 19, 2293814, 3538944, 19, 2293813, 3538944, 19, 1507393, 3538944, 19, 655422, 3538944, 19)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+limit_left = 0
+limit_top = 0
+limit_right = 2400
+limit_bottom = 1200
+script = ExtResource("3_5r1ux")
 
 [node name="ui_layer" type="CanvasLayer" parent="."]
 

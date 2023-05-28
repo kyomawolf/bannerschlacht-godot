@@ -2,17 +2,19 @@ extends Control
 
 var build_mode = false
 var move_mode = false
-var speed = 10
 var unit_mode=1
 var selected = null
 var ui = null
-var cam : Camera2D = null
+#var cam : Camera2D = null
 var once = false
 var terrain = null
 var visible_tiles = [] # Vector2i
 var debug = false
+var friendly_unit = null
+var enemy_unit = null
+var map_size = Vector2i(0, 0)
 
-var existing_units = [{"pos": Vector2i(-1, -1), "unit": null}]
+var existing_units = [ {"pos": Vector2i(-1, -1), "unit": null} ]
 
 
 # checks if field is empty
@@ -27,10 +29,11 @@ func tile_is_occupied(tile: Vector2i):
 func action_set_unit(tile_id, cell):
 	if not tile_is_occupied(tile_id):
 		var tile_node = get_parent().get_node("sampleGame")
-		var unit_name = "res://ressources/units/base.tscn"
-		if unit_mode == 2:
-			unit_name = "res://ressources/units/base_enemy.tscn"
-		var new_unit = load(unit_name).instantiate()
+		var new_unit = null
+		if unit_mode == 1:
+			new_unit = friendly_unit.instantiate()
+		elif unit_mode == 2:
+			new_unit = enemy_unit.instantiate()
 		new_unit.position = tile_id * 16
 		if unit_mode != 1 and debug == false:
 			new_unit.visible = false
@@ -38,29 +41,6 @@ func action_set_unit(tile_id, cell):
 		new_unit.player = unit_mode
 		existing_units.append({"pos": tile_id, "unit": new_unit})
 		# set tile 45, 29
-
-# camera zoom
-func camera_zoom():
-	# zoom
-	var input_zoom = Input.get_axis("camera_zoom_up", "camera_zoom_down")
-	var curr_zoom = cam.zoom
-	if input_zoom == 0:
-		return
-	# print(input_zoom, "  ", curr_zoom)
-	if curr_zoom.x < 1.6 and input_zoom == -1:
-		curr_zoom.x += 0.1
-	elif curr_zoom.x >= 0.4 and input_zoom == 1:
-		curr_zoom.x -= 0.1
-	curr_zoom.y = curr_zoom.x
-	cam.zoom = curr_zoom
-
-
-# camera movement
-func movement():
-	var input_direction = Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
-	var velocity = input_direction * speed
-	cam.move_local_x(velocity[0])
-	cam.move_local_y(velocity[1])
 
 
 func game_mode():
@@ -86,16 +66,16 @@ func game_mode():
 		selected = null
 
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	ui = self.get_node("ui_layer").get_node("ingame_ui").get_node("main")
-	cam = self.get_node("Camera2D")
+	# cam = self.get_node("Camera2D")
 	terrain = self.get_node("terrain")
 	var next_button = ui.get_node("control").get_node("next_round")
-	
+	friendly_unit = load("res://ressources/units/base.tscn")
+	enemy_unit = load("res://ressources/units/base_enemy.tscn")
 	next_button.pressed.connect(self.next_round)
-	
+	map_size = terrain.get_used_rect().size
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -106,7 +86,11 @@ func _process(delta):
 	if Input.is_key_pressed(KEY_ESCAPE):
 		scene_handler.print_tree()
 		scene_handler.get_node("sampleGame").queue_free()
-		scene_handler.get_node("MainMenu").set_process(true)
+		var err_check = scene_handler.get_node("MainMenu")
+		if err_check:
+			err_check.set_process(true)
+		else:
+			get_tree().quit()
 	# check for tile selection
 	if Input.is_action_just_released("mouse_left") and build_mode:
 		var tile_node = get_parent()
@@ -151,8 +135,8 @@ func next_round():
 		# do actions defined before (movement attack, etc)
 	# calculate fog of war
 	fog_of_war(1)
-	
-	
+
+
 # checks the tiles that are made visible by friendly units
 func add_visibles(origin: Vector2, length: int):
 	print(origin)
@@ -166,11 +150,10 @@ func add_visibles(origin: Vector2, length: int):
 				visible_tiles.append(Vector2i(i, ii))
 			#else:
 				#print("not in range", origin, Vector2i(i, ii), length)
-		
+
 
 # removes fow from visible fields and discovers enemy units
 func fog_of_war(player):
-	print(terrain.get_layers_count())
 	for entry in existing_units:
 		if entry["unit"] != null && \
 		entry["unit"].player == player:
@@ -185,7 +168,5 @@ func fog_of_war(player):
 		#terrain.set_cell(1, idx, 0, Vector2i(0,0))
 
 func _physics_process(_delta):
-	movement()
+	pass
 
-func _input(_event):
-	camera_zoom()

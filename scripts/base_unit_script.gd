@@ -2,6 +2,7 @@ extends Node
 
 enum direction{north, east, south, west}
 
+# load stats from settings
 var health = 100
 var attack = 10
 var defense = 5
@@ -11,7 +12,7 @@ var speed = 1
 var moral = 10
 var target = Vector2i(-1, -1)
 var player = 0
-var sight = 2
+var sight = 3
 
 var action_list = []
 
