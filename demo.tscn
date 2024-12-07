@@ -1,0 +1,94 @@
+[gd_scene load_steps=7 format=3 uid="uid://y4d7wqw3ag3x"]
+
+[ext_resource type="Script" path="res://camera.gd" id="1_nfibw"]
+[ext_resource type="Script" path="res://demo.gd" id="1_ugnwy"]
+[ext_resource type="TileSet" uid="uid://bq613uuneexvq" path="res://new_tile_set.tres" id="2_afuek"]
+[ext_resource type="Script" path="res://DataNode.gd" id="5_n4ped"]
+[ext_resource type="Script" path="res://PlayerNode.gd" id="6_ssp8x"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_4v4hm"]
+
+[node name="Demo" type="Node2D"]
+script = ExtResource("1_ugnwy")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource("2_afuek")
+format = 2
+layer_1/modulate = Color(0.60933, 0.60933, 0.60933, 1)
+layer_1/tile_data = PackedInt32Array()
+
+[node name="demotexture" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("ImageTexture_4v4hm")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("1_nfibw")
+
+[node name="Control" type="Control" parent="Camera2D"]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="Camera2D"]
+clip_contents = true
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -576.0
+offset_top = 189.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+
+[node name="ColorRect" type="ColorRect" parent="Camera2D/PanelContainer"]
+layout_mode = 2
+color = Color(0.5076, 0.254529, 0.0724293, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Camera2D/PanelContainer/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "move"
+
+[node name="Button2" type="Button" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "attack
+"
+
+[node name="Button3" type="Button" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "special action"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Stats:   "
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Camera2D/PanelContainer/ColorRect/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "mov"
+
+[node name="DataNode" type="Node2D" parent="."]
+script = ExtResource("5_n4ped")
+
+[node name="PlayerNode" type="Node" parent="DataNode"]
+script = ExtResource("6_ssp8x")
